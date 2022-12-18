@@ -18,7 +18,7 @@ class GoogleFormsApiConnection:
         self.scopes = scopes
         self.__authenticate()
 
-    def __authenticate(self):
+    def __authenticate(self) -> None:
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -40,10 +40,10 @@ class GoogleFormsApiConnection:
         # TODO: handle case when form is new and token needs to be regenerated
         self.service = build("forms", "v1", credentials=creds)
 
-    def fetch_form_responses(self, form_id: str):
+    def fetch_form_responses(self, form_id: str) -> dict:
         result = self.service.forms().responses().list(formId=form_id).execute()
         return result
 
-    def fetch_form_contents_metadata(self, form_id: str):
+    def fetch_form_contents_metadata(self, form_id: str) -> dict:
         result = self.service.forms().get(formId=form_id).execute()
         return result
