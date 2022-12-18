@@ -3,12 +3,11 @@ from typing import Union
 
 import gin
 from mentoring_reports_src.dao.forms_dao import GoogleFormsApiDAO
-from mentoring_reports_src.google_forms_api_connection import \
-    GoogleFormsApiConnection
+from mentoring_reports_src.google_forms_api_connection import GoogleFormsApiConnection
 
 
 @gin.configurable
-def download_responses(form_id: str, forms_datapath: Union[str, os.PathLike]):
+def download_responses(form_id: str, forms_datapath: Union[str, os.PathLike]) -> None:
     forms_conn = GoogleFormsApiConnection()
     forms_dao = GoogleFormsApiDAO(google_forms_api_conn=forms_conn, forms_id=form_id)
 
