@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
-from mentoring_reports_src.google_forms_api_connection import \
-    GoogleFormsApiConnection
+from mentoring_reports_src.google_forms_api_connection import GoogleFormsApiConnection
 
 
 class FormsDAO(ABC):
@@ -39,19 +38,27 @@ class GoogleFormsApiDAO(FormsDAO):
     ) -> list[dict[str, str]]:
         records: list[dict[str, str]] = []
 
-        for response_list in raw_form_data["responses"].values():
-            for response in response_list:
-                cur_record: dict[str, str] = {}
-                for answer in response["answers"].values():
-                    # TODO what if it isn't a text answer?
-                    # TODO what if there are more answers? (idx > 0?)
-                    text_answer = answer["textAnswers"]["answers"][0]["value"]
-                    question_id = answer["questionId"]
-                    question_text = self._get_question_text(
-                        raw_form_data["contents"], question_id
-                    )
-                    cur_record[question_text] = text_answer
-                records.append(cur_record)
+        contents = raw_form_data["contents"]
+        responses = list(raw_form_data["responses"].values())
+        if len(responses) > 1:
+            raise NotImplementedError("Unexpected number of items in responses")
+        responses = responses[0]
+        for response in responses:
+            cur_record: dict[str, str] = {}
+            for answer in response["answers"].values():
+                # TODO: what if it isn't a text answer? line below will raise an exception
+                #       probably will have to fetch answer type from question id, along with question text
+                text_answers = answer["textAnswers"]["answers"]
+                # TODO: what if there are more answers in the list? line below will raise an exception
+                if len(text_answers) > 1:
+                    raise NotImplementedError("Unexpected number of answers")
+                text_answer = text_answers[0]
+
+                answer_text = text_answer["value"]
+                question_id = answer["questionId"]
+                question_text = self._get_question_text(contents, question_id)
+                cur_record[question_text] = answer_text
+            records.append(cur_record)
         return records
 
     def load_form_data(self) -> pd.DataFrame:
