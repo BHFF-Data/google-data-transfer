@@ -7,15 +7,12 @@ from google.oauth2.credentials import Credentials
 import gin
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 
 @gin.configurable
 class GoogleFormsApiConnection:
-    def __init__(
-        self,
-        secrets_dir: Union[str, os.PathLike],
-        scopes: list[Union[str, os.PathLike]],
-    ):
+    def __init__(self, secrets_dir: Union[str, os.PathLike], scopes: list[str]):
         self.token_path = os.path.join(secrets_dir, "token.json")
         self.creds_path = os.path.join(secrets_dir, "credentials.json")
         self.scopes = scopes
@@ -40,9 +37,13 @@ class GoogleFormsApiConnection:
             # Save the credentials for the next run
             with open(self.token_path, "w") as token:
                 token.write(creds.to_json())
-
+        # TODO: handle case when form is new and token needs to be regenerated
         self.service = build("forms", "v1", credentials=creds)
 
-    def read_form_responses(self, form_id: str):
+    def fetch_form_responses(self, form_id: str):
         result = self.service.forms().responses().list(formId=form_id).execute()
+        return result
+
+    def fetch_form_contents_metadata(self, form_id: str):
+        result = self.service.forms().get(formId=form_id).execute()
         return result

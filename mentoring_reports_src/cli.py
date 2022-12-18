@@ -1,13 +1,14 @@
 import gin
 import typer
-from mentoring_reports_src.controller import show_responses
+from mentoring_reports_src.controller import download_responses
 
 
-def main(form_id: str = None):
-    if form_id is None:
-        show_responses()
+def main(form_url: str = None):
+    if form_url is None:
+        download_responses()
     else:
-        show_responses(form_id)
+        form_id = form_url.split("/")[-2]
+        download_responses(form_id)
 
 
 if __name__ == "__main__":
