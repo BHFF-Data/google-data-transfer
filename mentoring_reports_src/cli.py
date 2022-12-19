@@ -3,12 +3,11 @@ import typer
 from mentoring_reports_src.controller import download_responses
 
 
-def main(form_url: str = None):
-    if form_url is None:
-        download_responses()
-    else:
-        form_id = form_url.split("/")[-2]
-        download_responses(form_id)
+def main(form_url: str, sheet_url: str, sheet_name: str):
+    form_id = form_url.split("/")[-2]
+    sheet_id = sheet_url.split("/")[-2]
+    sheet_name = sheet_name.replace("_", " ")
+    download_responses(form_id, sheet_id, sheet_name)
 
 
 if __name__ == "__main__":

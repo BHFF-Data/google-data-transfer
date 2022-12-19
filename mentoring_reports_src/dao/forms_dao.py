@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
-from mentoring_reports_src.google_forms_api_connection import GoogleFormsApiConnection
+from mentoring_reports_src.google_api.google_connection import GoogleFormsConnection
 
 
 class FormsDAO(ABC):
@@ -11,8 +11,8 @@ class FormsDAO(ABC):
 
 
 class GoogleFormsApiDAO(FormsDAO):
-    def __init__(self, google_forms_api_conn: GoogleFormsApiConnection, forms_id: str):
-        self.forms_conn = google_forms_api_conn
+    def __init__(self, forms_id: str, google_forms_conn: GoogleFormsConnection):
+        self.forms_conn = google_forms_conn
         self.forms_id = forms_id
 
     def _read_form_raw_data(self) -> dict[str, dict]:
