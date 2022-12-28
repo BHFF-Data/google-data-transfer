@@ -1,10 +1,12 @@
 import os.path
 
+import gin
 import pandas as pd
 from mentoring_reports_src.commons import PathType
 from mentoring_reports_src.dao.google_dao import GoogleDAO
 
 
+@gin.configurable
 class FileDAO(GoogleDAO):
     def __init__(self, forms_path: PathType, sheets_path: PathType):
         self.forms_path = forms_path
