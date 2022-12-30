@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from collections import defaultdict
 import pandas as pd
 from mentoring_reports_src.google_api.google_connection import GoogleSheetsConnection
 
@@ -25,5 +25,10 @@ class GoogleSheetsApiDAO(SheetsDAO):
     def load_sheet_data(self) -> pd.DataFrame:
         raw_data = self._read_sheet_raw_data()
         columns = raw_data.pop(0)
+        # Append empty cols
+        for lst in raw_data:
+            extra_cols = len(columns) - len(lst)
+            for _ in range(extra_cols):
+                lst.append('')
         df = pd.DataFrame(raw_data, columns=columns)
         return df
