@@ -4,11 +4,22 @@ import gin
 import pandas as pd
 from mentoring_reports_src.commons import PathType
 from mentoring_reports_src.dao.google_dao import GoogleDAO
+from mentoring_reports_src.data_transfer import compute_target_col
 from mentoring_reports_src.google_api.auth import authenticate_google_api
 from mentoring_reports_src.google_api.google_connection import (
     GoogleFormsConnection,
     GoogleSheetsConnection,
 )
+from mentoring_reports_src.transfer_functions.mentoring_reports import (
+    compute_activity_col,
+)
+
+COLUMNS_JOIN_MAP = {
+    "First and Last Name": "Mentee",
+    "Mentor's First and Last Name": "Mentor",
+}
+
+TARGET_COL = "Status - July 2023"
 
 
 def connect_to_google_api():
@@ -43,3 +54,15 @@ def save_google_data(
         print(f"Saved {form_id} to {save_path}")
 
     return forms_df, sheets_df
+
+
+def transfer_form_responses_to_sheet(
+    form_df: pd.DataFrame,
+    sheet_df: pd.DataFrame,
+    target_col: str = TARGET_COL,
+    columns_join_map: dict[str:str] = COLUMNS_JOIN_MAP,
+    transfer_function: callable = compute_activity_col,
+) -> pd.DataFrame:
+    new_col = compute_target_col(form_df, sheet_df, transfer_function, columns_join_map)
+    sheet_df[target_col] = new_col
+    return sheet_df

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections import defaultdict
+
 import pandas as pd
 from mentoring_reports_src.google_api.google_connection import GoogleSheetsConnection
 
@@ -29,6 +29,6 @@ class GoogleSheetsApiDAO(SheetsDAO):
         for lst in raw_data:
             extra_cols = len(columns) - len(lst)
             for _ in range(extra_cols):
-                lst.append('')
+                lst.append("")
         df = pd.DataFrame(raw_data, columns=columns)
         return df
