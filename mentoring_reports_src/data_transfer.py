@@ -47,7 +47,8 @@ def match_form_with_sheet(
         # TODO: make the limit configurable. Optionally match each string individually
         if max_score < 90 * len(sheet_cols):
             warnings.warn(
-                f"Weak match between {sheet_row} : {max_score_form_row}. This row wasn't matched."
+                f"Weak match [{max_score / len(sheet_cols)}%] between {sheet_row} : {max_score_form_row}. This row "
+                f"wasn't matched."
             )
             matched_form_row = None
         matched_row_map[tuple(sheet_row)] = matched_form_row
