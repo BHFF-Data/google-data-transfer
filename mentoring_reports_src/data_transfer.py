@@ -72,7 +72,9 @@ def compute_target_col(
         matched_form_row = row_match_dict[tuple(sheet_row)]
         # If no response was found in forms
         if matched_form_row is None:
-            new_col.append("Unknown")
+            new_col.append(
+                "Unknown (report is missing)"
+            )  # TODO: ADD MESSAGE AS PARAMETER
             continue
         # Get the target which was matched with sheet row
         pandas_subqueries = [

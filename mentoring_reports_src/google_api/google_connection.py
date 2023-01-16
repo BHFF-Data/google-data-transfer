@@ -32,3 +32,6 @@ class GoogleSheetsConnection(GoogleConnection):
         result = sheet.values().get(spreadsheetId=sheet_id, range=sheet_name).execute()
         values = result.get("values", [])
         return values
+
+    def write_sheet_row(self):
+        ...

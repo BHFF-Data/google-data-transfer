@@ -4,21 +4,24 @@ import pandas as pd
 from mentoring_reports_src.google_api.google_connection import GoogleFormsConnection
 
 
-class FormsDAO(ABC):
+class Form(ABC):
+    id: str
+
     @abstractmethod
-    def load_form_data(self) -> pd.DataFrame:
+    def to_df(self) -> pd.DataFrame:
         ...
 
 
-class GoogleFormsApiDAO(FormsDAO):
-    def __init__(self, forms_id: str, google_forms_conn: GoogleFormsConnection):
-        self.forms_conn = google_forms_conn
-        self.forms_id = forms_id
+class GoogleAPIForm(Form):
+    def __init__(self, form_url: str, google_form_conn: GoogleFormsConnection):
+        self.url = form_url
+        self.id = form_url.split("/")[-2]
+        self._google_conn = google_form_conn
 
     def _read_form_raw_data(self) -> dict[str, dict]:
         raw_data = {
-            "contents": self.forms_conn.fetch_form_contents_metadata(self.forms_id),
-            "responses": self.forms_conn.fetch_form_responses(self.forms_id),
+            "contents": self._google_conn.fetch_form_contents_metadata(self.id),
+            "responses": self._google_conn.fetch_form_responses(self.id),
         }
         return raw_data
 
@@ -61,7 +64,7 @@ class GoogleFormsApiDAO(FormsDAO):
             records.append(cur_record)
         return records
 
-    def load_form_data(self) -> pd.DataFrame:
+    def to_df(self) -> pd.DataFrame:
         raw_data = self._read_form_raw_data()
         form_data_records = self._join_questions_and_responses(raw_data)
         df = pd.DataFrame.from_records(form_data_records)

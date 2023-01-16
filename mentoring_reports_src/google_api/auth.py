@@ -12,7 +12,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 def authenticate_google_api(
     secrets_dir: Union[str, os.PathLike], scopes: list[str]
 ) -> Credentials:
-    token_path = os.path.join(secrets_dir, "../token.json")
+    token_path = os.path.join(secrets_dir, "token.json")
     creds_path = os.path.join(secrets_dir, "credentials.json")
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
