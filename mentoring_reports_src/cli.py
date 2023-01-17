@@ -13,7 +13,7 @@ def cli_main(
     sheet_name: str,
     transfer_config: str = "Mentoring Reports Default",
 ):
-    # TODO: ADD MODE FOR PICKLING CONFIGS!
+    # TODO: ADD CLI MODE FOR PICKLING CONFIGS! IT SHOULD HAPPEN ONLY THE FIRST TIME THE CONFIG IS USED
     pickle_mentoring_reports()
 
     transfer_config_id = make_config_id(transfer_config)
