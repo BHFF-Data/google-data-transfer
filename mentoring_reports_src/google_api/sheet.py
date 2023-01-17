@@ -24,6 +24,7 @@ class GSpreadSheet(Sheet):
     def __init__(self, spreadsheet_url: str, sheet_name: str, creds_path: PathType):
         super().__init__(spreadsheet_url, sheet_name)
         self.creds_path = creds_path
+        # TODO: re-use auth token from auth.py
         self._gc = gspread.oauth(credentials_filename=creds_path)
         self._spreadsheet = self._gc.open_by_url(spreadsheet_url)
         self._sheet = self._spreadsheet.worksheet(sheet_name)

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import gin
 from mentoring_reports_src.commons import PathType
@@ -7,16 +8,36 @@ from mentoring_reports_src.google_api.auth import authenticate_google_api
 from mentoring_reports_src.google_api.form import Form, GoogleAPIForm
 from mentoring_reports_src.google_api.google_connection import GoogleFormsConnection
 from mentoring_reports_src.google_api.sheet import GSpreadSheet, Sheet
-from mentoring_reports_src.transfer_functions.mentoring_reports import (
-    compute_activity_col,
-)
+from mentoring_reports_src.transfer_configs.transfer_config import TransferConfig
 
-COLUMNS_JOIN_MAP = {
-    "First and Last Name": "Mentee",
-    "Mentor's First and Last Name": "Mentor",
-}
+# TODO: move all gin.config to controller
 
-TARGET_COL = "Status - July 2023"
+
+@gin.configurable
+def main(
+    form_url: str,
+    sheet_url: str,
+    sheet_name: str,
+    transfer_config_id: str,
+    transfer_configs_path: PathType,
+    secrets_path: PathType,
+    save_data: bool = True,
+):
+    pickle_config_path = Path(transfer_configs_path) / (transfer_config_id + ".pickle")
+    transfer_config = TransferConfig.from_pickle(pickle_config_path)
+
+    creds_path = Path(secrets_path) / "credentials.json"
+    sheet = GSpreadSheet(sheet_url, sheet_name, creds_path)
+
+    creds = authenticate_google_api()
+    forms_conn = GoogleFormsConnection(creds)
+    form = GoogleAPIForm(form_url, forms_conn)
+
+    transfer_form_responses_to_sheet(form, sheet, transfer_config)
+    # TODO: add logging
+    print("Data transfer successful.")
+    if save_data:
+        save_google_data(form, sheet)
 
 
 @gin.configurable
@@ -42,35 +63,15 @@ def save_google_data(
         print(f"Saved {form.id} to {save_path}")
 
 
-@gin.configurable
-def main(
-    form_url: str,
-    sheet_url: str,
-    sheet_name: str,
-    secrets_path: PathType,
-    save_data: bool = True,
-):
-    creds_path = secrets_path + "/credentials.json"
-    sheet = GSpreadSheet(sheet_url, sheet_name, creds_path)
-
-    creds = authenticate_google_api()
-    forms_conn = GoogleFormsConnection(creds)
-    form = GoogleAPIForm(form_url, forms_conn)
-
-    transfer_form_responses_to_sheet(form, sheet)
-    print("Data transfer successful.")
-    if save_data:
-        save_google_data(form, sheet)
-
-
 def transfer_form_responses_to_sheet(
-    form: Form,
-    sheet: Sheet,
-    target_col: str = TARGET_COL,
-    columns_join_map: dict[str:str] = COLUMNS_JOIN_MAP,
-    transfer_function: callable = compute_activity_col,
+    form: Form, sheet: Sheet, transfer_config: TransferConfig
 ) -> None:
     form_df = form.to_df()
     sheet_df = sheet.to_df()
-    new_col = compute_target_col(form_df, sheet_df, transfer_function, columns_join_map)
-    sheet.write_col(target_col, new_col)
+    new_col = compute_target_col(
+        form_df,
+        sheet_df,
+        transfer_config.transfer_function,
+        transfer_config.columns_join_map,
+    )
+    sheet.write_col(transfer_config.target_col, new_col)
