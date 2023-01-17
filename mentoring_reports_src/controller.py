@@ -23,6 +23,8 @@ def main(
     google_api_scopes: list[str],
     save_data: bool = True,
 ):
+    os.makedirs(transfer_configs_path, exist_ok=True)
+
     pickle_config_path = Path(transfer_configs_path) / (transfer_config_id + ".pickle")
     transfer_config = TransferConfig.from_pickle(pickle_config_path)
 
