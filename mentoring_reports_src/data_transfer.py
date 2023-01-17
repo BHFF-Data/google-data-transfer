@@ -65,7 +65,7 @@ def compute_target_col(
     # Which form questions were matched to which sheet columns
     row_match_dict = match_form_with_sheet(form_df, sheet_df, columns_join_map)
     # Compute new col from form
-    new_col_df = transfer_function(form_df, columns_join_map)
+    new_col_df = transfer_function(form_df)
     # Sort new col by position in sheet
     new_col = []
     for sheet_row in sheet_df[sheet_id_cols].values:
