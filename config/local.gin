@@ -1,0 +1,24 @@
+import mentoring_reports_src.controller
+
+CREDS = "./secrets/credentials.json"
+CREDS_TOKEN = "./secrets/token.json"
+TRANSFER_CONFIGS_DIR = "./config/transfer"
+FORMS_DIR= "./data/forms"
+SHEETS_DIR = "./data/sheets"
+
+SCOPES = (
+    "https://www.googleapis.com/auth/forms.body.readonly",
+    "https://www.googleapis.com/auth/forms.body",
+    "https://www.googleapis.com/auth/forms.responses.readonly",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/spreadsheets.readonly"
+) # TODO: find minimal scopes for each functionality
+
+save_google_data.forms_save_datapath=%FORMS_DIR
+save_google_data.sheets_save_datapath=%SHEETS_DIR
+main.transfer_configs_path=%TRANSFER_CONFIGS_DIR
+main.creds_path=%CREDS
+main.creds_token_path=%CREDS_TOKEN
+main.google_api_scopes=%SCOPES

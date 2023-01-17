@@ -10,8 +10,6 @@ from mentoring_reports_src.google_api.google_connection import GoogleFormsConnec
 from mentoring_reports_src.google_api.sheet import GSpreadSheet, Sheet
 from mentoring_reports_src.transfer_configs.transfer_config import TransferConfig
 
-# TODO: move all gin.config to controller
-
 
 @gin.configurable
 def main(
@@ -20,16 +18,17 @@ def main(
     sheet_name: str,
     transfer_config_id: str,
     transfer_configs_path: PathType,
-    secrets_path: PathType,
+    creds_path: PathType,
+    creds_token_path: PathType,
+    google_api_scopes: list[str],
     save_data: bool = True,
 ):
     pickle_config_path = Path(transfer_configs_path) / (transfer_config_id + ".pickle")
     transfer_config = TransferConfig.from_pickle(pickle_config_path)
 
-    creds_path = Path(secrets_path) / "credentials.json"
     sheet = GSpreadSheet(sheet_url, sheet_name, creds_path)
 
-    creds = authenticate_google_api()
+    creds = authenticate_google_api(creds_path, creds_token_path, google_api_scopes)
     forms_conn = GoogleFormsConnection(creds)
     form = GoogleAPIForm(form_url, forms_conn)
 
