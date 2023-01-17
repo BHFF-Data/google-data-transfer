@@ -50,6 +50,7 @@ def save_google_data(
     form_df = form.to_df()
 
     if sheets_save_datapath is not None:
+        os.makedirs(sheets_save_datapath, exist_ok=True)
         sheets_save_path = os.path.join(
             sheets_save_datapath, f"{sheet.spreadsheet_id}_{sheet.name}.csv"
         )
@@ -57,6 +58,7 @@ def save_google_data(
         print(f"Saved {sheet.spreadsheet_id}, {sheet.name} to {sheets_save_path}")
 
     if forms_save_datapath is not None:
+        os.makedirs(forms_save_datapath, exist_ok=True)
         save_path = os.path.join(forms_save_datapath, f"{form.id}.csv")
         form_df.to_csv(save_path)
         print(f"Saved {form.id} to {save_path}")
