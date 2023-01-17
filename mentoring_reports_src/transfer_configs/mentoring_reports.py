@@ -1,4 +1,7 @@
+import os
+
 import pandas as pd
+from mentoring_reports_src.commons import PathType
 from mentoring_reports_src.transfer_configs.transfer_config import TransferConfig
 
 ACTIVITY_QUESTION = "Have you made the inital contact with your mentor?"
@@ -25,8 +28,9 @@ def compute_activity_col(
     return df
 
 
-def pickle_mentoring_reports():
+def pickle_mentoring_reports(transfer_configs_path: PathType = "./config/transfer/"):
     default_mr = TransferConfig(
         COLUMNS_JOIN_MAP, TARGET_COL, DEFAULT_NAME, compute_activity_col
     )
-    default_mr.to_pickle("./config/transfer/")
+    os.makedirs(transfer_configs_path, exist_ok=True)
+    default_mr.to_pickle(transfer_configs_path)
