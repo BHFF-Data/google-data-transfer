@@ -11,6 +11,7 @@ def cli_main(
     form_url: str,
     sheet_url: str,
     sheet_name: str,
+    # target_col: str, # ADD AS A PARAM, NOT IN CONFIG!
     transfer_config: str = "Mentoring Reports Default",
 ):
     # TODO: ADD CLI MODE FOR PICKLING CONFIGS! IT SHOULD HAPPEN ONLY THE FIRST TIME THE CONFIG IS USED
