@@ -16,6 +16,7 @@ def main(
     form_url: str,
     sheet_url: str,
     sheet_name: str,
+    target_col: str,
     transfer_config_id: str,
     transfer_configs_path: PathType,
     creds_path: PathType,
@@ -32,7 +33,7 @@ def main(
     forms_conn = GoogleFormsConnection(creds)
     form = GoogleAPIForm(form_url, forms_conn)
 
-    transfer_form_responses_to_sheet(form, sheet, transfer_config)
+    transfer_form_responses_to_sheet(form, sheet, target_col, transfer_config)
     # TODO: add logging
     print("Data transfer successful.")
     if save_data:
@@ -65,7 +66,7 @@ def save_google_data(
 
 
 def transfer_form_responses_to_sheet(
-    form: Form, sheet: Sheet, transfer_config: TransferConfig
+    form: Form, sheet: Sheet, target_col: str, transfer_config: TransferConfig
 ) -> None:
     form_df = form.to_df()
     sheet_df = sheet.to_df()
@@ -75,4 +76,6 @@ def transfer_form_responses_to_sheet(
         transfer_config.transfer_function,
         transfer_config.columns_join_map,
     )
-    sheet.write_col(transfer_config.target_col, new_col)
+    if target_col is None:
+        target_col = transfer_config.target_col
+    sheet.write_col(target_col, new_col)
