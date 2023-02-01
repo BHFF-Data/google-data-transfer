@@ -1,4 +1,4 @@
-import mentoring_reports_src.controller
+import google_data_transfer.controller
 
 CREDS = "./secrets/credentials.json"
 CREDS_TOKEN = "./secrets/token.json"

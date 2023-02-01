@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Callable
 
 import pandas as pd
-from mentoring_reports_src.commons import PathType
+from google_data_transfer.commons import PathType
 
 
 def make_config_id(name: str) -> str:

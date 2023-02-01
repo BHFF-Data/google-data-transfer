@@ -1,8 +1,8 @@
 import os
 
 import pandas as pd
-from mentoring_reports_src.commons import PathType
-from mentoring_reports_src.transfer_configs.transfer_config import TransferConfig
+from google_data_transfer.commons import PathType
+from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
 INACTIVITY_REASON_QUESTION = (

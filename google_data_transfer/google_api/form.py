@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
-from mentoring_reports_src.google_api.google_connection import GoogleFormsConnection
+from google_data_transfer.google_api.google_connection import GoogleFormsConnection
 
 
 class Form(ABC):

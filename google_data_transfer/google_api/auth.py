@@ -4,7 +4,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
 from google_auth_oauthlib.flow import InstalledAppFlow
-from mentoring_reports_src.commons import PathType
+from google_data_transfer.commons import PathType
 
 
 def authenticate_google_api(

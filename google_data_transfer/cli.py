@@ -2,11 +2,11 @@ from typing import Optional
 
 import gin
 import typer
-from mentoring_reports_src.controller import main
-from mentoring_reports_src.transfer_configs.mentoring_reports import (
+from google_data_transfer.controller import main
+from google_data_transfer.transfer_configs.mentoring_reports import (
     pickle_mentoring_reports,
 )
-from mentoring_reports_src.transfer_configs.transfer_config import make_config_id
+from google_data_transfer.transfer_configs.transfer_config import make_config_id
 
 
 def cli_main(
