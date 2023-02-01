@@ -1,8 +1,8 @@
 import setuptools
 
-setuptools.setup(name='mentoring-reports',
+setuptools.setup(name='google-data-transfer',
                  version='0.1',
-                 description='Automating mentoring reports',
+                 description='Automating data transfer between Google Forms and Google Sheets',
                  author='Nadir Bašić',
                  install_requires=[],
                  author_email='data@bhfuturesfoundation.org',
