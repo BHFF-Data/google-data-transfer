@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import gspread
 import pandas as pd
-from mentoring_reports_src.commons import PathType
+from google_data_transfer.commons import PathType
 
 
 class Sheet(ABC):

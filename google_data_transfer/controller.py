@@ -2,13 +2,13 @@ import os
 from pathlib import Path
 
 import gin
-from mentoring_reports_src.commons import PathType
-from mentoring_reports_src.data_transfer import compute_target_col
-from mentoring_reports_src.google_api.auth import authenticate_google_api
-from mentoring_reports_src.google_api.form import Form, GoogleAPIForm
-from mentoring_reports_src.google_api.google_connection import GoogleFormsConnection
-from mentoring_reports_src.google_api.sheet import GSpreadSheet, Sheet
-from mentoring_reports_src.transfer_configs.transfer_config import TransferConfig
+from google_data_transfer.commons import PathType
+from google_data_transfer.data_transfer import compute_target_col
+from google_data_transfer.google_api.auth import authenticate_google_api
+from google_data_transfer.google_api.form import Form, GoogleAPIForm
+from google_data_transfer.google_api.google_connection import GoogleFormsConnection
+from google_data_transfer.google_api.sheet import GSpreadSheet, Sheet
+from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 
 @gin.configurable
