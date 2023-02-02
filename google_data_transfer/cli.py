@@ -3,12 +3,13 @@ from typing import Optional
 import gin
 import typer
 from google_data_transfer.controller import main
-from google_data_transfer.transfer_configs.mentoring_reports import (
-    pickle_mentoring_reports,
-)
+from google_data_transfer.transfer_configs.pickler import pickle_config
 from google_data_transfer.transfer_configs.transfer_config import make_config_id
 
+app = typer.Typer()
 
+
+@app.command(name="transfer")
 def cli_main(
     form_url: str,
     sheet_url: str,
@@ -16,9 +17,6 @@ def cli_main(
     target_col: Optional[str] = typer.Option(None),
     transfer_config: Optional[str] = "Mentoring Reports Default",
 ):
-    # TODO: ADD CLI MODE FOR PICKLING CONFIGS! IT SHOULD HAPPEN ONLY THE FIRST TIME THE CONFIG IS USED
-    pickle_mentoring_reports()
-
     transfer_config_id = make_config_id(transfer_config)
     sheet_name = sheet_name.replace("_", " ")  # typer can't accept strings with a space
     if target_col is not None:
@@ -26,6 +24,13 @@ def cli_main(
     main(form_url, sheet_url, sheet_name, target_col, transfer_config_id)
 
 
+@app.command()
+def pickle(transfer_config: str):
+    transfer_config_id = make_config_id(transfer_config)
+    pickle_config(transfer_config_id)
+    print("Pickled ", transfer_config)
+
+
 if __name__ == "__main__":
     gin.parse_config_file("config/local.gin")
-    typer.run(cli_main)
+    app()
