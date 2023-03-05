@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 import gin
@@ -6,6 +7,8 @@ from google_data_transfer.controller import main
 from google_data_transfer.transfer_configs.pickler import pickle_config
 from google_data_transfer.transfer_configs.transfer_config import make_config_id
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 app = typer.Typer()
 
 
@@ -50,7 +53,7 @@ def pickle(transfer_config: str):
     """
     transfer_config_id = make_config_id(transfer_config)
     pickle_config(transfer_config_id)
-    print("Pickled ", transfer_config)
+    logger.info(f"Pickled {transfer_config}")
 
 
 if __name__ == "__main__":

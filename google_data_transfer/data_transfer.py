@@ -1,8 +1,9 @@
-import warnings
+import logging
 
 import pandas as pd
 from fuzzywuzzy import fuzz
 
+logger = logging.getLogger(__name__)
 STRING_REPLACE_MAP = {"č": "c", "ć": "c", "š": "s", "ž": "z", "đ": "d", " ": ""}
 
 
@@ -86,9 +87,9 @@ def match_form_with_sheet(
         # Allow 10% difference between each string
         # TODO: make the limit configurable. Optionally match each string individually
         if max_score < 90 * len(sheet_cols):
-            warnings.warn(
-                f"Weak match [{max_score / len(sheet_cols)}%] between {sheet_row} : {max_score_form_row}. This row "
-                f"wasn't matched."
+            logger.warning(
+                f"Weak match [{max_score / len(sheet_cols)}%] between existing sheet row and best form response match: "
+                f"<SHEET> {sheet_row}: <FORM> {max_score_form_row}. This row was skipped."
             )
             matched_form_row = None
         matched_row_map[tuple(sheet_row)] = matched_form_row
