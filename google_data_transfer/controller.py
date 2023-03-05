@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -7,6 +8,8 @@ from google_data_transfer.data_transfer import compute_target_col
 from google_data_transfer.google_api.form import Form, GoogleAPIForm
 from google_data_transfer.google_api.sheet import GSpreadSheet, Sheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
+
+logger = logging.getLogger(__name__)
 
 
 @gin.configurable
@@ -49,8 +52,8 @@ def main(
     )
 
     transfer_form_responses_to_sheet(form, sheet, target_col, transfer_config)
-    # TODO: add logging
-    print("Data transfer successful.")
+    logger.info("Data transfer successful.")
+
     if save_data:
         save_google_data(form, sheet)
 
@@ -86,13 +89,13 @@ def save_google_data(
             sheets_save_datapath, f"{sheet.spreadsheet_id}_{sheet.name}.csv"
         )
         sheet_df.to_csv(sheets_save_path)
-        print(f"Saved {sheet.spreadsheet_id}, {sheet.name} to {sheets_save_path}")
+        logger.info(f"Saved {sheet.spreadsheet_id}, {sheet.name} to {sheets_save_path}")
 
     if forms_save_datapath is not None:
         os.makedirs(forms_save_datapath, exist_ok=True)
         save_path = os.path.join(forms_save_datapath, f"{form.id}.csv")
         form_df.to_csv(save_path)
-        print(f"Saved {form.id} to {save_path}")
+        logger.info(f"Saved {form.id} to {save_path}")
 
 
 def transfer_form_responses_to_sheet(
