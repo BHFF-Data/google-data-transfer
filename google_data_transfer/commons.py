@@ -1,5 +1,6 @@
 import json
 import os
+import pathlib
 from typing import Union
 
 
@@ -17,4 +18,4 @@ def jprint(dic):
 
 
 # TODO: handle all path manipulations with pathlib
-PathType = Union[str, os.PathLike]
+PathType = Union[str, os.PathLike, pathlib.Path]

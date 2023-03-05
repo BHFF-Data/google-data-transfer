@@ -4,7 +4,6 @@ from pathlib import Path
 import gin
 from google_data_transfer.commons import PathType
 from google_data_transfer.data_transfer import compute_target_col
-from google_data_transfer.google_api.auth import authenticate_google_api
 from google_data_transfer.google_api.form import Form, GoogleAPIForm
 from google_data_transfer.google_api.google_connection import GoogleFormsConnection
 from google_data_transfer.google_api.sheet import GSpreadSheet, Sheet
@@ -45,11 +44,10 @@ def main(
     pickle_config_path = Path(transfer_configs_path) / (transfer_config_id + ".pickle")
     transfer_config = TransferConfig.from_pickle(pickle_config_path)
 
-    sheet = GSpreadSheet(sheet_url, sheet_name, creds_path)
-
-    creds = authenticate_google_api(creds_path, creds_token_path, google_api_scopes)
-    forms_conn = GoogleFormsConnection(creds)
-    form = GoogleAPIForm(form_url, forms_conn)
+    sheet = GSpreadSheet.from_creds_file(creds_path, sheet_url, sheet_name)
+    form = GoogleAPIForm.from_creds_file(
+        creds_path, creds_token_path, google_api_scopes, form_url
+    )
 
     transfer_form_responses_to_sheet(form, sheet, target_col, transfer_config)
     # TODO: add logging
