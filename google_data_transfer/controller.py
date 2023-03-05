@@ -5,7 +5,6 @@ import gin
 from google_data_transfer.commons import PathType
 from google_data_transfer.data_transfer import compute_target_col
 from google_data_transfer.google_api.form import Form, GoogleAPIForm
-from google_data_transfer.google_api.google_connection import GoogleFormsConnection
 from google_data_transfer.google_api.sheet import GSpreadSheet, Sheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
