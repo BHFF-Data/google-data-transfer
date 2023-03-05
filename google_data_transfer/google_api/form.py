@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
+from google_data_transfer.commons import PathType
+from google_data_transfer.google_api.auth import authenticate_google_api
 from google_data_transfer.google_api.google_connection import GoogleFormsConnection
 
 
@@ -62,6 +64,18 @@ class GoogleAPIForm(Form):
         self.url = form_url
         self.id = form_url.split("/")[-2]
         self._google_conn = google_form_conn
+
+    @classmethod
+    def from_creds_file(
+        cls,
+        creds_path: PathType,
+        creds_token_path: PathType,
+        scopes: list[str],
+        form_url: str,
+    ):
+        creds = authenticate_google_api(creds_path, creds_token_path, scopes)
+        forms_conn = GoogleFormsConnection(creds)
+        return cls(form_url, forms_conn)
 
     def _read_form_raw_data(self) -> dict[str, dict]:
         """!!! note
