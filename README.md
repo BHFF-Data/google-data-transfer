@@ -1,3 +1,4 @@
+![plot](bhff-logo.png)
 # Google Data Transfer
 Automating data transfer and processing between Google Forms and Google Sheets, using Google Cloud APIs.
 Currently only supports the "Mentoring Reports Default" transfer configuration, used for mentoring report automatization inside BHFF.
