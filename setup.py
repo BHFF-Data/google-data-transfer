@@ -6,7 +6,7 @@ with open("requirements.txt") as f:
 setuptools.setup(name='google-data-transfer',
                  version='0.1',
                  description='Automating data transfer between Google Forms and Google Sheets',
-                 author='Nadir Bašić',
+                 author='Nejra Smajlovic',
                  install_requires=reqs,
                  author_email='data@bhfuturesfoundation.org',
                  packages=setuptools.find_packages(),
