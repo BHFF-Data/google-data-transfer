@@ -1,8 +1,7 @@
-import google_data_transfer.controller
+import google_data_transfer.controller.cli
 
 CREDS = "./secrets/credentials.json"
 CREDS_TOKEN = "./secrets/token.json"
-TRANSFER_CONFIGS_DIR = "./config/transfer"
 FORMS_DIR= "./data/forms"
 SHEETS_DIR = "./data/sheets"
 
@@ -18,7 +17,6 @@ SCOPES = (
 
 save_google_data.forms_save_datapath=%FORMS_DIR
 save_google_data.sheets_save_datapath=%SHEETS_DIR
-main.transfer_configs_path=%TRANSFER_CONFIGS_DIR
-main.creds_path=%CREDS
-main.creds_token_path=%CREDS_TOKEN
-main.google_api_scopes=%SCOPES
+process_mentoring_reports.creds_path=%CREDS
+process_mentoring_reports.creds_token_path=%CREDS_TOKEN
+process_mentoring_reports.google_api_scopes=%SCOPES

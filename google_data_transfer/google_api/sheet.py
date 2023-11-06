@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 import gspread
 import pandas as pd
+
 from google_data_transfer.commons import PathType
 
 
