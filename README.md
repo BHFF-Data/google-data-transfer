@@ -17,8 +17,12 @@ pip install -e .
 #### Mentoring Reports processing
 After a "Mentoring Report" Google form is filled out by BHFF scholars, the responses about their mentoring activity (having enough meetings) and the reason behind potential inactivity are transferred to a "Mentoring Scholar Tracking" Google sheet. <br />
 The form's and sheet's "edit" URLs must be provided. An "edit" URL contains the `/edit` substring and can be acquired when editing the resources with appropriate permissions. <br />
-Run the following command from the repo root:
+##### CLI:
 ```shell
-python google_data_transfer/cli.py <form-edit-url> <sheet-edit-url> <sheet-name> [--target-col <target-col>]
+python google_data_transfer/cli.py <form-edit-url> <sheet-edit-url> <sheet-name> [--target-col=<target-col>]
+```  
+##### GUI:
+```shell
+python -m streamlit run google_data_transfer/ui/webapp.py
 ```  
 
