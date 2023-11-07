@@ -8,7 +8,7 @@ from google_data_transfer.commons import PathType
 
 
 def authenticate_google_api(
-    creds_path: PathType, creds_token_path: PathType, scopes: list[str]
+    creds_path: PathType, creds_token_path: PathType, scopes: tuple[str]
 ) -> Credentials:
     """Authenticate with Google API
 
