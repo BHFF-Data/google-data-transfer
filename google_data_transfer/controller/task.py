@@ -5,14 +5,14 @@ from typing import Optional
 from google_data_transfer.commons import PathType
 from google_data_transfer.controller.data_transfer import compute_target_col
 from google_data_transfer.google_api.form import Form
-from google_data_transfer.google_api.sheet import Sheet
+from google_data_transfer.google_api.sheet import SubSheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 logger = logging.getLogger(__name__)
 
 
 def transfer_form_responses_to_sheet(
-    form: Form, sheet: Sheet, target_col: str, transfer_config: TransferConfig
+    form: Form, sheet: SubSheet, target_col: str, transfer_config: TransferConfig
 ) -> None:
     """Transfer responses from a form to a sheet.
 
@@ -44,7 +44,7 @@ def transfer_form_responses_to_sheet(
 
 def save_google_data(
     form: Form,
-    sheet: Sheet,
+    sheet: SubSheet,
     form_save_path: Optional[PathType] = None,
     sheet_save_path: Optional[PathType] = None,
 ) -> None:
