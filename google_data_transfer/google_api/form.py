@@ -5,7 +5,7 @@ import pandas as pd
 
 from google_data_transfer.commons import PathType
 from google_data_transfer.google_api.auth import authenticate_google_api
-from google_data_transfer.google_api.google_connection import GoogleFormsClient
+from google_data_transfer.google_api.google_client import GoogleFormsClient
 
 
 @dataclass
@@ -78,7 +78,7 @@ class GoogleAPIForm(Form):
         cls,
         creds_path: PathType,
         creds_token_path: PathType,
-        scopes: list[str],
+        scopes: tuple[str],
         form_url: str,
     ):
         """Create a new instance of the class from a credentials file.

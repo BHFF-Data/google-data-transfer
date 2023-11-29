@@ -1,9 +1,5 @@
 import google_data_transfer.controller.cli
-
-CREDS = "./secrets/credentials.json"
-CREDS_TOKEN = "./secrets/token.json"
-FORMS_DIR= "./data/forms"
-SHEETS_DIR = "./data/sheets"
+import google_data_transfer.controller.webapp
 
 SCOPES = (
     "https://www.googleapis.com/auth/forms.body.readonly",
@@ -15,8 +11,5 @@ SCOPES = (
     "https://www.googleapis.com/auth/spreadsheets.readonly"
 ) # TODO: find minimal scopes for each functionality
 
-save_google_data.forms_save_datapath=%FORMS_DIR
-save_google_data.sheets_save_datapath=%SHEETS_DIR
-process_mentoring_reports.creds_path=%CREDS
-process_mentoring_reports.creds_token_path=%CREDS_TOKEN
 process_mentoring_reports.google_api_scopes=%SCOPES
+WebApp.google_api_scopes=%SCOPES

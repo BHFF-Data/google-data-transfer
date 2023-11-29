@@ -167,6 +167,10 @@ class GSpreadSheet(Sheet):
         """
         return self._df
 
+    @property
+    def columns(self) -> list[str]:
+        return self.to_df().columns
+
     def write_col(self, col_name: str, col_values: list) -> None:
         """Write a column to a Google sheet.
 

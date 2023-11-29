@@ -19,3 +19,8 @@ def jprint(dic):
 
 # TODO: handle all path manipulations with pathlib
 PathType = Union[str, os.PathLike, pathlib.Path]
+
+CREDS_PATH = "./secrets/credentials.json"
+CREDS_TOKEN_PATH = "./secrets/token.json"
+FORMS_DIR = "./data/forms"
+SHEETS_DIR = "./data/sheets"

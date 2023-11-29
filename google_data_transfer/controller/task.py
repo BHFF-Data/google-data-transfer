@@ -1,7 +1,6 @@
 import logging
 import os
-
-import gin
+from typing import Optional
 
 from google_data_transfer.commons import PathType
 from google_data_transfer.controller.data_transfer import compute_target_col
@@ -43,20 +42,19 @@ def transfer_form_responses_to_sheet(
     sheet.write_col(target_col, new_col)
 
 
-@gin.configurable
 def save_google_data(
     form: Form,
     sheet: Sheet,
-    forms_save_datapath: PathType = None,
-    sheets_save_datapath: PathType = None,
+    form_save_path: Optional[PathType] = None,
+    sheet_save_path: Optional[PathType] = None,
 ) -> None:
     """Save Google Form and Sheet data to disk.
 
     Args:
         form: The form to save
         sheet: The sheet to save
-        forms_save_datapath: The path to save the form data to
-        sheets_save_datapath: The path to save the sheet data to
+        form_save_path: The path to save the form data to
+        sheet_save_path: The path to save the sheet data to
 
     Returns:
         None
@@ -68,16 +66,16 @@ def save_google_data(
     sheet_df = sheet.to_df()
     form_df = form.to_df()
 
-    if sheets_save_datapath is not None:
-        os.makedirs(sheets_save_datapath, exist_ok=True)
+    if sheet_save_path is not None:
+        os.makedirs(sheet_save_path, exist_ok=True)
         sheets_save_path = os.path.join(
-            sheets_save_datapath, f"{sheet.spreadsheet_id}_{sheet.name}.csv"
+            sheet_save_path, f"{sheet.spreadsheet_id}_{sheet.name}.csv"
         )
         sheet_df.to_csv(sheets_save_path)
         logger.info(f"Saved {sheet.spreadsheet_id}, {sheet.name} to {sheets_save_path}")
 
-    if forms_save_datapath is not None:
-        os.makedirs(forms_save_datapath, exist_ok=True)
-        save_path = os.path.join(forms_save_datapath, f"{form.id}.csv")
+    if form_save_path is not None:
+        os.makedirs(form_save_path, exist_ok=True)
+        save_path = os.path.join(form_save_path, f"{form.id}.csv")
         form_df.to_csv(save_path)
         logger.info(f"Saved {form.id} to {save_path}")
