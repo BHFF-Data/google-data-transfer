@@ -16,7 +16,9 @@ def main():
         if sheet_url:
             webapp.init_sheet(sheet_url)
             subsheet_names = webapp.get_subsheet_names()
-            sheet_name = st.selectbox("Unesite ime sheeta:", subsheet_names, index=None)
+            sheet_name = st.selectbox(
+                "Izaberite ime sheeta:", subsheet_names, index=None
+            )
             if sheet_name:
                 webapp.init_subsheet(sheet_name)
                 cols = webapp.get_sheet_cols()
