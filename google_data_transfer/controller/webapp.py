@@ -1,6 +1,8 @@
 from typing import Optional
 
 import gin
+import streamlit as st
+import os
 
 from google_data_transfer.commons import CREDS_PATH, CREDS_TOKEN_PATH
 from google_data_transfer.controller.task import transfer_form_responses_to_sheet
@@ -20,7 +22,7 @@ class WebApp:
     _transfer_config: Optional[TransferConfig] = None
 
     def __init__(
-        self, google_api_scopes: tuple, transfer_config: Optional[TransferConfig] = None
+            self, google_api_scopes: tuple, transfer_config: Optional[TransferConfig] = None
     ):
         self._google_api_scopes = google_api_scopes
         if transfer_config is None:
@@ -32,8 +34,16 @@ class WebApp:
             CREDS_PATH, CREDS_TOKEN_PATH, self._google_api_scopes, form_url
         )
 
+    def init_form_env(self, form_url: str):
+        self._form = GoogleAPIForm.from_creds(
+            st.secrets["token"], self._google_api_scopes, form_url
+        )
+
     def init_sheet(self, sheet_url: str, sheet_name: str):
         self._sheet = GSpreadSheet.from_creds_file(CREDS_PATH, sheet_url, sheet_name)
+
+    def init_sheet_env(self, sheet_url: str, sheet_name: str):
+        self._sheet = GSpreadSheet.from_creds(st.secrets["token"], sheet_url, sheet_name)
 
     def get_sheet_cols(self) -> list[str]:
         return self._sheet.columns
@@ -42,3 +52,5 @@ class WebApp:
         transfer_form_responses_to_sheet(
             self._form, self._sheet, target_col, self._transfer_config
         )
+
+
