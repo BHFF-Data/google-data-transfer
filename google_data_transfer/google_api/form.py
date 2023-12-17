@@ -207,7 +207,7 @@ class GoogleAPIForm(Form):
     @classmethod
     def from_creds(
             cls,
-            json_token: Any,
+            json_token,
             scopes: tuple[str],
             form_url: str,
     ):

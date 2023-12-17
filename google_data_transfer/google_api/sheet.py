@@ -132,7 +132,7 @@ class GSpreadSheet(Sheet):
 
     @classmethod
     def from_creds(
-        cls, json_token: Any, spreadsheet_url: str, sheet_name: str
+        cls, json_token, spreadsheet_url: str, sheet_name: str
     ):
         # TODO: re-use auth token from auth.py
         """Create a new Spreadsheet from a credentials file.

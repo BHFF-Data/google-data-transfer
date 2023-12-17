@@ -23,6 +23,6 @@ python google_data_transfer/cli.py <form-edit-url> <sheet-edit-url> <sheet-name>
 ```  
 ##### GUI:
 ```shell
-python -m streamlit run google_data_transfer/ui/webapp.py
+python -m streamlit run google_data_transfer/ui/webapp_run.py
 ```  
 

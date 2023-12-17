@@ -44,7 +44,7 @@ def authenticate_google_api(
 
 
 def authenticate_google_api_st(
-        json_token: Any, scopes: tuple[str]
+        json_token, scopes: tuple[str]
 ) -> Credentials:
     """Authenticate with Google API
 
