@@ -11,11 +11,11 @@ def main():
 
     form_url = st.text_input("Unesite 'edit' link Google forme:", key="form")
     if form_url:
-        webapp.init_form_env(form_url)
+        webapp.init_form_env(form_url, st.secrets["token"])
         sheet_url = st.text_input("Unesite 'edit' link Google sheeta:")
         sheet_name = st.text_input("Unesite ime sheeta:")
         if sheet_url and sheet_name:
-            webapp.init_sheet_env(sheet_url, sheet_name)
+            webapp.init_sheet_env(sheet_url, sheet_name, st.secrets["installed"])
             cols = webapp.get_sheet_cols()
             target_col = st.selectbox(
                 "Izaberite u koju kolonu želite upisati rezultat:", cols, index=None

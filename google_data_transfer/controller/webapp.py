@@ -34,16 +34,16 @@ class WebApp:
             CREDS_PATH, CREDS_TOKEN_PATH, self._google_api_scopes, form_url
         )
 
-    def init_form_env(self, form_url: str):
+    def init_form_env(self, form_url: str, json_token):
         self._form = GoogleAPIForm.from_creds(
-            st.secrets["token"], self._google_api_scopes, form_url
+            json_token, self._google_api_scopes, form_url
         )
 
     def init_sheet(self, sheet_url: str, sheet_name: str):
         self._sheet = GSpreadSheet.from_creds_file(CREDS_PATH, sheet_url, sheet_name)
 
-    def init_sheet_env(self, sheet_url: str, sheet_name: str):
-        self._sheet = GSpreadSheet.from_creds(st.secrets["token"], sheet_url, sheet_name)
+    def init_sheet_env(self, sheet_url: str, sheet_name: str, json_token):
+        self._sheet = GSpreadSheet.from_creds(json_token, sheet_url, sheet_name)
 
     def get_sheet_cols(self) -> list[str]:
         return self._sheet.columns
