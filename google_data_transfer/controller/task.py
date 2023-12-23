@@ -12,14 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 def transfer_form_responses_to_sheet(
-    form: Form, sheet: Sheet, target_col: str, transfer_config: TransferConfig
+    form: Form, sheet: Sheet, transfer_config: TransferConfig
 ) -> None:
     """Transfer responses from a form to a sheet.
 
     Args:
         form: The form to transfer responses from.
         sheet: The sheet to transfer responses to.
-        target_col: The column to transfer responses to.
         transfer_config: The transfer configuration.
 
     Returns:
@@ -35,11 +34,9 @@ def transfer_form_responses_to_sheet(
         form_df,
         sheet_df,
         transfer_config.transfer,
-        transfer_config.columns_join_map,
+        transfer_config.match_col_form_name_to_sheet_name_map,
     )
-    if target_col is None:
-        target_col = transfer_config.target_col
-    sheet.write_col(target_col, new_col)
+    sheet.write_col(transfer_config.target_col, new_col)
 
 
 def save_google_data(
