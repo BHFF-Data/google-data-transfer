@@ -240,3 +240,4 @@ fabric.properties
 
 # BHFF Data Transfer
 secrets/
+.streamlit

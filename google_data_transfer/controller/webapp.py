@@ -33,8 +33,16 @@ class WebApp:
             CREDS_PATH, CREDS_TOKEN_PATH, self._google_api_scopes, form_url
         )
 
+    def init_form_env(self, form_url: str, json_token):
+        self._form = GoogleForm.from_creds(
+            json_token, self._google_api_scopes, form_url
+        )
+
     def init_sheet(self, sheet_url: str):
         self._sheet = GoogleSheet.from_creds_file(CREDS_PATH, sheet_url)
+
+    def init_sheet_env(self, sheet_url: str, json_token):
+        self._sheet = GoogleSheet.from_creds(json_token, sheet_url)
 
     def init_subsheet(self, sheet_name: str):
         self._subsheet = self._sheet.get_subsheet(sheet_name)
