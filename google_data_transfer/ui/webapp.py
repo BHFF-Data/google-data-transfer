@@ -11,12 +11,12 @@ def main():
 
     form_url = st.text_input("Unesite 'edit' link Google forme:", key="form")
     if form_url:
-        webapp.init_form_env(form_url, st.secrets["token"])
-        # webapp.init_form(form_url)
+        # webapp.init_form_env(form_url, st.secrets["token"])
+        webapp.init_form(form_url)
         sheet_url = st.text_input("Unesite 'edit' link Google sheeta:")
         if sheet_url:
-            webapp.init_sheet_env(sheet_url, st.secrets["installed"])
-            # webapp.init_sheet(sheet_url)
+            # webapp.init_sheet_env(sheet_url, st.secrets["installed"])
+            webapp.init_sheet(sheet_url)
             subsheet_names = webapp.get_subsheet_names()
             sheet_name = st.selectbox(
                 "Izaberite ime sheeta:", subsheet_names, index=None

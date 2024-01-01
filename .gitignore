@@ -239,6 +239,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # BHFF Data Transfer
-secrets/
+# secrets/
 .streamlit
 .run
