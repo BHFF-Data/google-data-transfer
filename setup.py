@@ -1,6 +1,6 @@
 import setuptools
 
-with open("environment.yml") as f:
+with open("requirements.txt") as f:
     reqs = f.read().splitlines()
 
 setuptools.setup(
