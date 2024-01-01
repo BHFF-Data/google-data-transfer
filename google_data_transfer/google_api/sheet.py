@@ -53,7 +53,7 @@ class GoogleSheet:
 
     @classmethod
     def from_creds(
-            cls, json_token, spreadsheet_url: str, sheet_name: str
+            cls, json_token, spreadsheet_url: str
     ):
         # TODO: re-use auth token from auth.py
         """Create a new Spreadsheet from a credentials file.
@@ -61,7 +61,6 @@ class GoogleSheet:
         Args:
             json_token: Authentication token
             spreadsheet_url: URL of the spreadsheet.
-            sheet_name: Name of the sheet.
 
         Returns:
             A new Spreadsheet object.
