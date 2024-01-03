@@ -8,7 +8,7 @@ SCOPES = (
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive.readonly",
-    "https://www.googleapis.com/auth/spreadsheets"
+    "https://www.googleapis.com/auth/spreadsheets.readonly"
 ) # TODO: find minimal scopes for each functionality
 
 process_mentoring_reports.google_api_scopes=%SCOPES
