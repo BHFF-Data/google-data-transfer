@@ -38,11 +38,19 @@ class WebApp:
             credentials, self._google_api_scopes, form_url
         )
 
+    def init_form_from_acces_token(self, form_url: str, access_token: dict):
+        self._form = GoogleForm.from_access_token_dict(
+            access_token, self._google_api_scopes, form_url
+        )
+
     def init_sheet(self, sheet_url: str):
         self._sheet = GoogleSheet.from_creds_file(CREDS_PATH, sheet_url)
 
     def init_sheet_from_credentials(self, sheet_url: str, credentials: dict):
         self._sheet = GoogleSheet.from_creds_dict(credentials, sheet_url)
+
+    def init_sheet_from_access_token(self, sheet_url: str, access_token: dict):
+        self._sheet = GoogleSheet.from_access_token_dict(access_token, sheet_url)
 
     def init_subsheet(self, sheet_name: str):
         self._subsheet = self._sheet.get_subsheet(sheet_name)
