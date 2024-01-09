@@ -99,3 +99,16 @@ class MentoringReportsTransferConfig(TransferConfig):
         return match_sheet_with_form_fuzzy(
             form.to_df(), worksheet.to_df(), self.match_col_form_name_to_sheet_name_map
         )
+        # TODO: implement strict matching based on knowledge base
+        # STEP 1: construct knowledge-base worksheet, example: Junior Scholars
+        knowledge_base = sheet.get_worksheet('Junior Scholars')
+        # STEP 2:
+        # - uzeti sve  redove iz worksheet, tj njihove ključne kolone (Mentor, Mentee)
+        # - za svaki red, naći odgovarajući email u knowledge base
+        # - provjeriti da li taj email postoji u form
+        # RADITI NA OSNOVU FUNCKIJE match_sheet_with_form_fuzzy
+        # Testirati na testnoj formi
+
+        # rezultat : {(Nadir Basic, Nadira Basic): basicnadir@gmail.com}
+        # LIJEVO: ključ sheeta, DESNO: ključ forme
+
