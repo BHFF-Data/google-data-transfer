@@ -3,6 +3,9 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from google_data_transfer.google_api.form import Form
+from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
+
 
 @dataclass
 class TransferConfig(ABC):
@@ -16,5 +19,7 @@ class TransferConfig(ABC):
         ...
 
     @abstractmethod
-    def match_rows(self, *args, **kwargs) -> dict:
+    def match_rows(
+        self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
+    ) -> dict:
         ...

@@ -2,8 +2,9 @@ from typing import Optional
 
 import pandas as pd
 
+from google_data_transfer.controller.row_matching import match_sheet_with_form_fuzzy
 from google_data_transfer.google_api.form import Form
-from google_data_transfer.google_api.sheet import GoogleSpreadSheet
+from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
@@ -27,8 +28,6 @@ DEFAULT_NAME = "Mentoring Reports Default"
 MISSING_FILL_VALUE = "Unknown (report is missing)"
 
 
-
-
 class MentoringReportsTransferConfig(TransferConfig):
     def __init__(
         self,
@@ -43,7 +42,9 @@ class MentoringReportsTransferConfig(TransferConfig):
             )
         if target_col is None:
             self.target_col = TARGET_COL
-        super().__init__(match_col_form_name_to_sheet_name_map, target_col, name, missing_fill_value)
+        super().__init__(
+            match_col_form_name_to_sheet_name_map, target_col, name, missing_fill_value
+        )
 
     def transfer(
         self,
@@ -92,5 +93,9 @@ class MentoringReportsTransferConfig(TransferConfig):
         df = df.rename(columns={activity_question: "target"})
         return df
 
-    def match_rows(self, form: Form, sheet: GoogleSpreadSheet) -> dict:
-        ...
+    def match_rows(
+        self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
+    ) -> dict:
+        return match_sheet_with_form_fuzzy(
+            form.to_df(), worksheet.to_df(), self.match_col_form_name_to_sheet_name_map
+        )

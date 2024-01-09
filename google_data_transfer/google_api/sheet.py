@@ -6,7 +6,7 @@ import pandas as pd
 from google_data_transfer.commons import PathType, compute_google_resource_id_from_url
 
 
-class Sheet(ABC):
+class Worksheet(ABC):
     spreadsheet_id: str
     name: str
 
@@ -41,7 +41,9 @@ class GoogleSpreadSheet:
 
     def get_worksheet(self, worksheet_name: str) -> "GoogleWorksheet":
         gspread_worksheet = self._sheet.worksheet(worksheet_name)
-        worksheet = GoogleWorksheet(gspread_worksheet, self.spreadsheet_id, worksheet_name)
+        worksheet = GoogleWorksheet(
+            gspread_worksheet, self.spreadsheet_id, worksheet_name
+        )
         return worksheet
 
     @classmethod
@@ -52,7 +54,7 @@ class GoogleSpreadSheet:
         return cls(gspread_client, spreadsheet_url)
 
 
-class GoogleWorksheet(Sheet):
+class GoogleWorksheet(Worksheet):
     def __init__(
         self,
         gspread_worksheet: gspread.Worksheet,
