@@ -2,6 +2,8 @@ from typing import Optional
 
 import pandas as pd
 
+from google_data_transfer.google_api.form import Form
+from google_data_transfer.google_api.sheet import GoogleSpreadSheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
@@ -22,6 +24,9 @@ MATCH_COL_FORM_NAME_TO_SHEET_NAME_MAP = {
 }
 TARGET_COL = "Status - January 2023"
 DEFAULT_NAME = "Mentoring Reports Default"
+MISSING_FILL_VALUE = "Unknown (report is missing)"
+
+
 
 
 class MentoringReportsTransferConfig(TransferConfig):
@@ -30,6 +35,7 @@ class MentoringReportsTransferConfig(TransferConfig):
         match_col_form_name_to_sheet_name_map: Optional[dict[str, str]] = None,
         target_col: Optional[str] = None,
         name: str = DEFAULT_NAME,
+        missing_fill_value: str = MISSING_FILL_VALUE,
     ):
         if match_col_form_name_to_sheet_name_map is None:
             match_col_form_name_to_sheet_name_map = (
@@ -37,7 +43,7 @@ class MentoringReportsTransferConfig(TransferConfig):
             )
         if target_col is None:
             self.target_col = TARGET_COL
-        super().__init__(match_col_form_name_to_sheet_name_map, target_col, name)
+        super().__init__(match_col_form_name_to_sheet_name_map, target_col, name, missing_fill_value)
 
     def transfer(
         self,
@@ -85,3 +91,6 @@ class MentoringReportsTransferConfig(TransferConfig):
         df = df[form_cols]
         df = df.rename(columns={activity_question: "target"})
         return df
+
+    def match_rows(self, form: Form, sheet: GoogleSpreadSheet) -> dict:
+        ...
