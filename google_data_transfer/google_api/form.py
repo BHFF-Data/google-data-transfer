@@ -57,6 +57,7 @@ class GoogleForm(Form):
         records: list[dict[str, str]] = []
         for response in self._read_form_responses():
             cur_record: dict[str, str] = {}
+            cur_record["__email"] = response.get('respondentEmail')
             for answer in response["answers"].values():
                 # TODO: what if it isn't a text answer? line below will raise an exception
                 #       probably will have to fetch answer type from question id, along with question text
