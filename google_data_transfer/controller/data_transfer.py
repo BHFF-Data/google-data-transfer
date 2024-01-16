@@ -21,6 +21,8 @@ def compute_target_col(
     sheet_to_form_row_match_map = transfer_config.match_rows(form, sheet, worksheet)
     # Compute
     new_col_df = transfer_config.transfer(form_df)
+    #{("Abdulah Kadiric", "Mujo Haso") : None, ("Ajla Korman", "Lartida Nuhanovic"): "korman.ajla115@gmail.com" ...
+    #   }  # TODO : ovako izgleda output za testnu formu!
     # Replace form row id values with sheet row id values
     form_id_cols = list(transfer_config.match_col_form_name_to_sheet_name_map.keys())
     form_to_sheet_row_match_map = {v: k for k, v in sheet_to_form_row_match_map.items()}

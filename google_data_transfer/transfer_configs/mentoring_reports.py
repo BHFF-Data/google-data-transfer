@@ -22,7 +22,7 @@ INACTIVITY_MAP = {
 MATCH_COL_FORM_NAME_TO_SHEET_NAME_MAP = {
     "First and Last Name": "Mentee",
     "Mentor's First and Last Name": "Mentor",
-}
+}  # TODO: nadir popravi
 TARGET_COL = "Status - January 2023"
 DEFAULT_NAME = "Mentoring Reports Default"
 MISSING_FILL_VALUE = "Unknown (report is missing)"
@@ -104,11 +104,13 @@ class MentoringReportsTransferConfig(TransferConfig):
         knowledge_base = sheet.get_worksheet('Junior Scholars')
         # STEP 2:
         # - uzeti sve  redove iz worksheet, tj njihove ključne kolone (Mentor, Mentee)
-        # - za svaki red, naći odgovarajući email u knowledge base
-        # - provjeriti da li taj email postoji u form
+        # - za svaki red, naći odgovarajući email u knowledge base, odgovarajuca kolona za Mentor u Tracking Juniors jeste Mentor Name u Junior Scholars itd
+        # - email svakog scholara bi trebao biti pronađen u knowledge base, jer su isti ljudi pravili oba sheeta
+        # nakon sto pronadjemo email adresu koja odgovara nekom redu u Tracking Juniors:
+        # - provjeriti da li ta email adresa postoji u formi
+        # ako postoji: (Nadir Basic, Nadira Basic): basicnadir@gmail.com}
+        # ako ne postoji (scholar nije odgovorio)  (Mujo, Haso): None
         # RADITI NA OSNOVU FUNCKIJE match_sheet_with_form_fuzzy
         # Testirati na testnoj formi
-
-        # rezultat : {(Nadir Basic, Nadira Basic): basicnadir@gmail.com}
         # LIJEVO: ključ sheeta, DESNO: ključ forme
 
