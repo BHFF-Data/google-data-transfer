@@ -11,6 +11,7 @@ import pandas as pd
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
+import streamlit as st
 from httplib2 import Http
 from apiclient import discovery
 
@@ -49,14 +50,13 @@ def authenticate():
     '''
 
     scopes = ['https://www.googleapis.com/auth/forms.responses.readonly']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-       service_account_path, scopes=scopes)
-    print('Service account email is', credentials.service_account_email)
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+       keyfile_dict=st.secrets["service_account"], scopes=scopes)
     http = credentials.authorize(Http())
     service = discovery.build('forms', 'v1', http=http, discoveryServiceUrl=DISCOVERY_DOC, static_discovery=False,)
     form_id = "1ver4nYOU3mrigFg_ly9f2_HwHvdCKmqQLrR5IXZDGaQ"
     result = service.forms().responses().list(formId=form_id).execute()
-    print(result["responses"][0])
+    st.write(result["responses"][0])
 
 if __name__ == "__main__":
     authenticate()
