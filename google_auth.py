@@ -1,11 +1,8 @@
 # tutorial
-
 import streamlit as st
 
 from oauth2client.service_account import ServiceAccountCredentials
 
-creds_token_path = "secrets/credentials.json"
-creds_path = "./secrets/credentials.json"
 service_account_path = "./secrets/form_service_account.json"
 scopes = (
     "https://www.googleapis.com/auth/forms.body.readonly",
@@ -36,14 +33,28 @@ def authenticate():
     print(file_metadata)
     '''
 
-    scopes = ['https://www.googleapis.com/auth/forms.responses.readonly']
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
         keyfile_dict=st.secrets["service_account"], scopes=scopes)
     http = credentials.authorize(Http())
-    service = discovery.build('forms', 'v1', http=http, discoveryServiceUrl=DISCOVERY_DOC, static_discovery=False, )
+
+    form_service = discovery.build('forms', 'v1', http=http, discoveryServiceUrl=DISCOVERY_DOC,
+                                   static_discovery=False, )
     form_id = "1ver4nYOU3mrigFg_ly9f2_HwHvdCKmqQLrR5IXZDGaQ"
-    result = service.forms().responses().list(formId=form_id).execute()
-    st.write(result["responses"][0])
+    form_result = form_service.forms().responses().list(formId=form_id).execute()
+    st.write(form_result["responses"][0])
+
+    DISCOVERY_DOC_SHEET = "https://sheets.googleapis.com/$discovery/rest?version=v4"
+    sheet_service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=DISCOVERY_DOC_SHEET,
+                                    static_discovery=False)
+
+    sheet_id = "1LMKIqFrrP5AFUDJ37SOIRHLAphV3OiCrR9d4C1t92hQ"
+    sheet_result = (
+        sheet_service.spreadsheets()
+        .values()
+        .batchGet(spreadsheetId=sheet_id, ranges="A1:C10")
+        .execute()
+    )
+    st.write(sheet_result);
 
 
 if __name__ == "__main__":
