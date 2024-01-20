@@ -21,7 +21,7 @@ class WebApp:
     _transfer_config: Optional[TransferConfig] = None
 
     def __init__(
-        self, google_api_scopes: tuple, transfer_config: Optional[TransferConfig] = None
+            self, google_api_scopes: tuple, transfer_config: Optional[TransferConfig] = None
     ):
         self._google_api_scopes = google_api_scopes
         if transfer_config is None:
@@ -43,6 +43,11 @@ class WebApp:
             access_token, self._google_api_scopes, form_url
         )
 
+    def init_form_from_service_account(self, form_url: str, service_account_creds: dict):
+        self._form = GoogleForm.from_service_account_creds(
+            service_account_creds, self._google_api_scopes, form_url
+        )
+
     def init_sheet(self, sheet_url: str):
         self._sheet = GoogleSheet.from_creds_file(CREDS_PATH, sheet_url)
 
@@ -51,6 +56,10 @@ class WebApp:
 
     def init_sheet_from_access_token(self, sheet_url: str, access_token: dict):
         self._sheet = GoogleSheet.from_access_token_dict(access_token, sheet_url)
+
+    def init_sheet_from_service_account(self, sheet_url: str, service_account_creds: dict):
+        self._sheet = GoogleSheet.from_service_account_creds(service_account_creds=service_account_creds,
+                                                             spreadsheet_url=sheet_url)
 
     def init_subsheet(self, sheet_name: str):
         self._subsheet = self._sheet.get_subsheet(sheet_name)
