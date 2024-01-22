@@ -19,6 +19,7 @@ def compute_target_col(
     sheet_df = worksheet.to_df()
     # Which form questions were matched to which sheet columns
     sheet_to_form_row_match_map = transfer_config.match_rows(form, sheet, worksheet)
+    #{larisa nuhanoivc, ajla korman :laarisa nuhanovic} sheet to form
     # Compute
     new_col_df = transfer_config.transfer(form_df)
     # Replace form row id values with sheet row id values
