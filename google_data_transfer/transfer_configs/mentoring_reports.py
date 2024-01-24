@@ -2,7 +2,12 @@ from typing import Optional
 
 import pandas as pd
 
+from google_data_transfer.commons import FORM_RESPONDENT_EMAIL_COL
+from google_data_transfer.google_api.form import Form
+from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
+
+KNOWLEDGE_BASE_EMAIL_COL = "Scholars email"
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
 INACTIVITY_REASON_QUESTION = (
@@ -16,28 +21,50 @@ INACTIVITY_MAP = {
     "My Mentor wasn't available for me": "Inactive due to mentor",
 }
 
-MATCH_COL_FORM_NAME_TO_SHEET_NAME_MAP = {
-    "First and Last Name": "Mentee",
-    "Mentor's First and Last Name": "Mentor",
+FORM_KEY = FORM_RESPONDENT_EMAIL_COL
+WORKSHEET_TO_KNOWLEDGE_BASE_KEYS_MAP = {
+    "Mentor": "Mentor Name",
+    "Mentee": "Mentee Name",
 }
 TARGET_COL = "Status - January 2023"
 DEFAULT_NAME = "Mentoring Reports Default"
+MISSING_FILL_VALUE = "Unknown (report is missing)"
+
+WORKSHEET_TO_KNOWLEDGE_BASE_NAME_MAP = {
+    "Tracking Juniors": "Junior Scholars",
+    "Tracking Seniors": "Senior Scholars",
+}
 
 
 class MentoringReportsTransferConfig(TransferConfig):
     def __init__(
         self,
-        match_col_form_name_to_sheet_name_map: Optional[dict[str, str]] = None,
+        form_key: str = FORM_KEY,
+        worksheet_to_knowledge_base_keys_map: dict | None = None,
+        worksheet_to_knowledge_base_name_map: dict | None = None,
         target_col: Optional[str] = None,
         name: str = DEFAULT_NAME,
+        missing_fill_value: str = MISSING_FILL_VALUE,
+        knowledge_base_email_col: str = KNOWLEDGE_BASE_EMAIL_COL,
     ):
-        if match_col_form_name_to_sheet_name_map is None:
-            match_col_form_name_to_sheet_name_map = (
-                MATCH_COL_FORM_NAME_TO_SHEET_NAME_MAP
-            )
+        if worksheet_to_knowledge_base_keys_map is None:
+            worksheet_to_knowledge_base_keys_map = WORKSHEET_TO_KNOWLEDGE_BASE_KEYS_MAP
+        if worksheet_to_knowledge_base_name_map is None:
+            worksheet_to_knowledge_base_name_map = WORKSHEET_TO_KNOWLEDGE_BASE_NAME_MAP
+        sheet_key = list(worksheet_to_knowledge_base_keys_map.keys())
+        knowledge_base_key = list(worksheet_to_knowledge_base_keys_map.values())
+
         if target_col is None:
             self.target_col = TARGET_COL
-        super().__init__(match_col_form_name_to_sheet_name_map, target_col, name)
+        super().__init__([form_key], sheet_key, target_col, name, missing_fill_value)
+        self._worksheet_to_knowledge_base_keys_map = (
+            worksheet_to_knowledge_base_keys_map
+        )
+        self._worksheet_to_knowledge_base_name_map = (
+            worksheet_to_knowledge_base_name_map
+        )
+        self._knowledge_base_key = knowledge_base_key
+        self._knowledge_base_email_col = knowledge_base_email_col
 
     def transfer(
         self,
@@ -80,8 +107,42 @@ class MentoringReportsTransferConfig(TransferConfig):
                 df[activity_question] == inactivity_value, activity_question
             ] = df.loc[df[activity_question] == inactivity_value, inactivity_question]
 
-        form_match_cols = list(self.match_col_form_name_to_sheet_name_map.keys())
-        form_cols = form_match_cols + [activity_question]
+        form_cols = self.form_key + [activity_question]
         df = df[form_cols]
         df = df.rename(columns={activity_question: "target"})
         return df
+
+    def match_rows(
+        self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
+    ) -> dict:
+        # For every (mentee, mentor) pair, find email address
+        knowledge_base_name = self._worksheet_to_knowledge_base_name_map[worksheet.name]
+        knowledge_base = sheet.get_worksheet(knowledge_base_name)
+        knowledge_base_df = knowledge_base.to_df()
+        worksheet_df = worksheet.to_df()
+        joined_df = pd.merge(
+            worksheet_df,
+            knowledge_base_df,
+            left_on=self.sheet_key,
+            right_on=self._knowledge_base_key,
+            how="inner",
+        )
+        result_cols = list(self.sheet_key) + [self._knowledge_base_email_col]
+        worksheet_key_and_email_df = joined_df[result_cols]
+        # Check which email addresses were in the form responses
+        form_df = form.to_df()
+        final_df = pd.merge(
+            worksheet_key_and_email_df,
+            form_df,
+            left_on=self._knowledge_base_email_col,
+            right_on=self.form_key,
+            how="inner",
+        )
+        final_cols = list(self.sheet_key) + list(self.form_key)
+        final_df = final_df[final_cols]
+        result_dict = (
+            final_df.set_index(self.sheet_key)[self.form_key]
+            .apply(tuple, axis=1)
+            .to_dict()
+        )
+        return result_dict

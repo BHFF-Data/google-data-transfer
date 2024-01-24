@@ -15,12 +15,12 @@ def main():
         sheet_url = st.text_input("Unesite 'edit' link Google sheeta:")
         if sheet_url:
             webapp.init_sheet(sheet_url)
-            subsheet_names = webapp.get_subsheet_names()
+            worksheet_names = webapp.get_worksheet_names()
             sheet_name = st.selectbox(
-                "Izaberite ime sheeta:", subsheet_names, index=None
+                "Izaberite ime sheeta:", worksheet_names, index=None
             )
             if sheet_name:
-                webapp.init_subsheet(sheet_name)
+                webapp.init_worksheet(sheet_name)
                 cols = webapp.get_sheet_cols()
                 target_col = st.selectbox(
                     "Izaberite u koju kolonu želite upisati rezultat:", cols, index=None
