@@ -14,3 +14,5 @@ CREDS_PATH = "./secrets/credentials.json"
 CREDS_TOKEN_PATH = "./secrets/token.json"
 FORMS_DIR = "./data/forms"
 SHEETS_DIR = "./data/sheets"
+
+FORM_RESPONDENT_EMAIL_COL = "__email"

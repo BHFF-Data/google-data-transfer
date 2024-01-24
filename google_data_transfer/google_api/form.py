@@ -2,7 +2,11 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
-from google_data_transfer.commons import PathType, compute_google_resource_id_from_url
+from google_data_transfer.commons import (
+    FORM_RESPONDENT_EMAIL_COL,
+    PathType,
+    compute_google_resource_id_from_url,
+)
 from google_data_transfer.google_api.auth import authenticate_google_api
 from google_data_transfer.google_api.google_client import GoogleFormsClient
 
@@ -56,7 +60,9 @@ class GoogleForm(Form):
     ) -> pd.DataFrame:
         records: list[dict[str, str]] = []
         for response in self._read_form_responses():
-            cur_record: dict[str, str] = {"__email": response.get('respondentEmail')}
+            cur_record: dict[str, str] = {
+                FORM_RESPONDENT_EMAIL_COL: response.get("respondentEmail")
+            }
             for answer in response["answers"].values():
                 # TODO: what if it isn't a text answer? line below will raise an exception
                 #       probably will have to fetch answer type from question id, along with question text

@@ -9,7 +9,8 @@ from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
 
 @dataclass
 class TransferConfig(ABC):
-    match_col_form_name_to_sheet_name_map: dict[str, str]
+    form_key: list[str]
+    sheet_key: list[str]
     target_col: str
     name: str
     missing_fill_value: str
