@@ -2,6 +2,11 @@ from typing import Optional
 
 import pandas as pd
 
+from google_data_transfer.controller.row_matching import match_sheet_with_form_fuzzy
+
+from google_data_transfer.google_api import sheet
+from google_data_transfer.google_api.form import Form
+from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
@@ -22,6 +27,7 @@ MATCH_COL_FORM_NAME_TO_SHEET_NAME_MAP = {
 }
 TARGET_COL = "Status - January 2023"
 DEFAULT_NAME = "Mentoring Reports Default"
+MISSING_FILL_VALUE = "Unknown (report is missing)"
 
 
 class MentoringReportsTransferConfig(TransferConfig):
@@ -30,6 +36,7 @@ class MentoringReportsTransferConfig(TransferConfig):
         match_col_form_name_to_sheet_name_map: Optional[dict[str, str]] = None,
         target_col: Optional[str] = None,
         name: str = DEFAULT_NAME,
+        missing_fill_value: str = MISSING_FILL_VALUE,
     ):
         if match_col_form_name_to_sheet_name_map is None:
             match_col_form_name_to_sheet_name_map = (
@@ -37,7 +44,11 @@ class MentoringReportsTransferConfig(TransferConfig):
             )
         if target_col is None:
             self.target_col = TARGET_COL
-        super().__init__(match_col_form_name_to_sheet_name_map, target_col, name)
+        super().__init__(
+            match_col_form_name_to_sheet_name_map, target_col, name, missing_fill_value
+        )
+        self.knowledge_base = sheet.get_worksheet('Junior Scholars')
+
 
     def transfer(
         self,
@@ -85,3 +96,52 @@ class MentoringReportsTransferConfig(TransferConfig):
         df = df[form_cols]
         df = df.rename(columns={activity_question: "target"})
         return df
+
+    def match_rows(
+        self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
+    ) -> dict:
+
+        #itterate over rows, find email, chech in form
+        #return match_sheet_with_form_fuzzy(
+         #   form.to_df(), worksheet.to_df(), self.match_col_form_name_to_sheet_name_map
+        #)
+        form_df = form.to_df()
+        sheet_df = worksheet.to_df()
+        matching_pairs = {}
+
+        for index, row in sheet_df.iterrows():
+            mentor_name = row['Mentor']
+            mentee_name = row['Mentee']
+
+            # TODO: Use a strict matching function
+            mentor_email = self.find_mentor_email(mentor_name)
+            mentee_email = self.find_mentee_email(mentee_name)
+
+            if mentor_email and mentee_email:
+                # TODO: Check if emails exist in the form
+                if mentor_email in form_df['Mentor Email'].tolist() and mentee_email in form_df[
+                    'Mentee Email'].tolist():
+                    matching_pairs[(mentor_name, mentee_name)] = (mentor_email, mentee_email)
+
+        return matching_pairs
+
+        def find_mentor(self, mentor_name: str) -> Optional[str]:
+            return match_sheet_with_form_fuzzy(mentor_name, self.knowledge_base.to_df(),{'Mentors First and Last Name': ''})
+
+        def find_mentee(self, mentee_name: str) -> Optional[str]:
+            return match_sheet_with_form_fuzzy(mentee_name, self.knowledge_base.to_df(),
+                                               {'First and Last Name': 'Mentee'})
+
+        # TODO: implement strict matching based on knowledge base
+        # STEP 1: construct knowledge-base worksheet, example: Junior Scholars
+        knowledge_base = sheet.get_worksheet('Junior Scholars')
+        # STEP 2:
+        # - uzeti sve  redove iz worksheet, tj njihove ključne kolone (Mentor, Mentee)
+        # - za svaki red, naći odgovarajući email u knowledge base
+        # - provjeriti da li taj email postoji u form
+        # RADITI NA OSNOVU FUNCKIJE match_sheet_with_form_fuzzy
+        # Testirati na testnoj formi
+
+        # rezultat : {(Nadir Basic, Nadira Basic): basicnadir@gmail.com}
+        # LIJEVO: ključ sheeta, DESNO: ključ forme
+

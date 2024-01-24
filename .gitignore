@@ -240,3 +240,6 @@ fabric.properties
 
 # BHFF Data Transfer
 secrets/
+
+# For ensuring password security
+.streamlit/secrets.toml
