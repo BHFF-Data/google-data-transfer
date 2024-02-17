@@ -7,7 +7,7 @@ from google_data_transfer.google_api.form import Form
 from google_data_transfer.google_api.sheet import GoogleSpreadSheet, Worksheet
 from google_data_transfer.transfer_configs.transfer_config import TransferConfig
 
-KNOWLEDGE_BASE_EMAIL_COL = "Scholars email"
+KNOWLEDGE_BASE_EMAIL_COL = "Mentee email"
 
 ACTIVITY_QUESTION = "Do you have recommended number of meetings with your mentor?"
 INACTIVITY_REASON_QUESTION = (
@@ -38,14 +38,14 @@ WORKSHEET_TO_KNOWLEDGE_BASE_NAME_MAP = {
 
 class MentoringReportsTransferConfig(TransferConfig):
     def __init__(
-        self,
-        form_key: str = FORM_KEY,
-        worksheet_to_knowledge_base_keys_map: dict | None = None,
-        worksheet_to_knowledge_base_name_map: dict | None = None,
-        target_col: Optional[str] = None,
-        name: str = DEFAULT_NAME,
-        missing_fill_value: str = MISSING_FILL_VALUE,
-        knowledge_base_email_col: str = KNOWLEDGE_BASE_EMAIL_COL,
+            self,
+            form_key: str = FORM_KEY,
+            worksheet_to_knowledge_base_keys_map: dict | None = None,
+            worksheet_to_knowledge_base_name_map: dict | None = None,
+            target_col: Optional[str] = None,
+            name: str = DEFAULT_NAME,
+            missing_fill_value: str = MISSING_FILL_VALUE,
+            knowledge_base_email_col: str = KNOWLEDGE_BASE_EMAIL_COL,
     ):
         if worksheet_to_knowledge_base_keys_map is None:
             worksheet_to_knowledge_base_keys_map = WORKSHEET_TO_KNOWLEDGE_BASE_KEYS_MAP
@@ -67,13 +67,13 @@ class MentoringReportsTransferConfig(TransferConfig):
         self._knowledge_base_email_col = knowledge_base_email_col
 
     def transfer(
-        self,
-        form_df: pd.DataFrame,
-        activity_question: str = ACTIVITY_QUESTION,
-        activity_response_map: Optional[dict[str, str]] = None,
-        inactivity_question: str = INACTIVITY_REASON_QUESTION,
-        inactivity_response_map: Optional[dict[str, str]] = None,
-        inactivity_value: str = INACTIVITY_VALUE,
+            self,
+            form_df: pd.DataFrame,
+            activity_question: str = ACTIVITY_QUESTION,
+            activity_response_map: Optional[dict[str, str]] = None,
+            inactivity_question: str = INACTIVITY_REASON_QUESTION,
+            inactivity_response_map: Optional[dict[str, str]] = None,
+            inactivity_value: str = INACTIVITY_VALUE,
     ) -> pd.DataFrame:
         """Compute the activity column
 
@@ -113,7 +113,7 @@ class MentoringReportsTransferConfig(TransferConfig):
         return df
 
     def match_rows(
-        self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
+            self, form: Form, sheet: GoogleSpreadSheet, worksheet: Worksheet
     ) -> dict:
         # For every (mentee, mentor) pair, find email address
         knowledge_base_name = self._worksheet_to_knowledge_base_name_map[worksheet.name]
